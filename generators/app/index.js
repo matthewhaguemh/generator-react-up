@@ -24,6 +24,7 @@ module.exports = yeoman.Base.extend({
    * 1. Create component
    * 2. Optional test stubs
    * 3. Do we want to use inline styles
+   * 4. Action creators file
    */
   prompting: function () {
     var prompts = [{
@@ -36,14 +37,21 @@ module.exports = yeoman.Base.extend({
       name: 'addTests',
       message: 'Create test folder + stub?',
       default: true
-    }, {
+    },
+    {
+      type: 'confirm',
+      name: 'addActions',
+      message: 'Add actions file?',
+      default: true
+    },
+    {
       type: 'confirm',
       name: 'useRadium',
       message: 'Use radium / CSS Modules?',
       default: true
     }];
 
-    // Now we ahve our answers, set our data
+    // Now we have our answers, set our data
     return this.prompt(prompts).then(function (props) {
       this.props = props;
       this.data = {
@@ -80,5 +88,9 @@ module.exports = yeoman.Base.extend({
       var testPath = folder + '/__test__/index.js';
       this.template('test.js', testPath, data);
     }
+    if (props.addActions) {
+      var actionsPath = folder + '/' + data.name + 'Actions.js'
+      this.template('actions.js', actionsPath, data);
+    };
   }
 });
